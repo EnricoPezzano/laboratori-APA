@@ -36,6 +36,5 @@ for binCount in binCounts:
 			count = count + 1
 
 	plt.gca().set(title='Istogramma LVQuicksort', xlabel='Numero di Confronti', ylabel='Frequenza')
-	patches[count].set_fc('y')	
-	plt.savefig(f'istogramma.png')
+	plt.savefig(f'Istogramma.png')
 	plt.close()

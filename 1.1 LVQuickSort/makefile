@@ -9,7 +9,7 @@ all:
 
 	python3 make_ist.py
 
-	@echo "Programma terminato con successo."
+	@echo "Programma terminato."
 
 clean:
-	rm -f istogramma.png comparison.dat espettazione.dat startLVQS
+	rm -f Istogramma.png comparison.dat espettazione.dat startLVQS
