@@ -1,4 +1,5 @@
 from random import choice
+import math
 # Genera il grafo di Fritsch (che trovi nelle note) con 9 vertici e 21 archi e 
 # verifica la frequenza empirica ^p con la quale ottieni un taglio minimo applicando 
 # MCMinCut 10^5 volte. --- Utilizza ^p per calcolare il numero di run R necessari per 
@@ -32,7 +33,6 @@ def main():
 	#conto elementi
 	n_run = 100000
 	my_list = []
-	contator = 0
 
 	#creazione del grafo
 	for _ in range(n_run):
@@ -57,8 +57,6 @@ def main():
 				n = len(val)
 			my_list.append(n)
 
-
-
 	#calcolo delle occorrenze e della frequenza empirica
 	occurrencies = {}
 	for y in my_list:
@@ -69,15 +67,11 @@ def main():
 
 	my_print(occurrencies)
 	print("Il taglio minimo è ", min(occurrencies.keys()))
-	print("la frequenza empirica è ", occurrencies[min(occurrencies.keys())]/n_run)
-	print("")
-
-
-	# TO DO LIST:
-	# Utilizza ^p(freq empirica) per calcolare il numero di run R necessari per 
-	# ottenere il taglio minimo con una probabilità del 99,9%
-
-
-
+	p = occurrencies[min(occurrencies.keys())]/n_run
+	print("La frequenza empirica è ", p)
 	
+	n_run_min = -7/(math.log(1-p))
+
+	# print("test: ", math.modf(n_run_min))
+	print("Il numero di run per calcolare il taglio minimo con la probabilità del 99,9% è ", math.ceil(n_run_min),"\n")
 main()
