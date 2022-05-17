@@ -93,10 +93,10 @@ def main():
          neededRounds+=1
 
 
+   print()
+   print("N° di round per raggiungere l'accordo:", neededRounds)
 
    
-
-   
-   print(R)
+   print("\nR: ", R)
    print()
 main()
