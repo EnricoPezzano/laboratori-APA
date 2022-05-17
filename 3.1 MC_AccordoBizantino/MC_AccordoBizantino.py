@@ -1,3 +1,4 @@
+#MG
 import random
 
 results = []
@@ -11,6 +12,8 @@ maj = [] # list
 tally = [] # list
 GENLENGTH = len(Generals)-1
 neededRounds = 0
+
+R = pow(2, 10)
 
 def most_frequent(mylist):
     counter = {}
@@ -94,6 +97,6 @@ def main():
    
 
    
-
+   print(R)
    print()
 main()
