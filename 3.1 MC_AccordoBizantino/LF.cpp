@@ -54,23 +54,26 @@ int ty (int m [x] [y],int x){
 }
 
 int accprob (int a[r]){
-	// Determino il numero di round dopo il quale la probabilità che l'accordo è raggiunto è più grande del 99.9%
-	int ripetizioni [r];
+	// Determino il numero di round dopo il quale la probabilitÃ  che l'accordo abbia raggiunto il piÃ¹ grande del 99.9%
+	int ripetizioni[r];
 	int somma = 0;
 	for (int i = 0; i<r; i++){	//inizializzo vettore a 0
     	ripetizioni[i]=0;
   	}
-  		for (int i = 0; i<r; i++){			// riempo un vettore con tutti i possibili numeri di round dopo i quali si raggiunge un accordo e conto quate volte escono
+   for (int i = 0; i<r; i++){			// riempo un vettore con tutti i possibili numeri di round dopo i quali si raggiunge un accordo e conto quate volte escono
     	ripetizioni[a[i]]++;
   	}
-  		for (int i = 0; i<r; i++){	
-  	}
+   // for (int i = 0; i<r; i++){	
+  	// }
   	
-  	for (int i = 0; i<44; i++){		// sommo le volte in cui si raggiunge un accordo in tali round e se questo supera il 99.9% delle volte lo ritorno
+   int i;
+  	for (i = 0; i<44; i++){		// sommo le volte in cui si raggiunge un accordo in tali round e se questo supera il 99.9% delle volte lo ritorno
     	somma+=ripetizioni[i];
-    	if (somma>=r-(r*0.001))	return i++;
+    	if (somma>=r-(r*0.001))	break;
 	}
+   return i++;
 }
+
 float media(int a[r]){
 	float med=0;
 	for(int i=0;i<r;i++){
@@ -78,6 +81,7 @@ float media(int a[r]){
 	}
 	return med=med/r;
 }
+
 float varianza(int a[r]){
 		float somma = 0;
 		for (int i = 0; i < r; i++)
@@ -90,7 +94,7 @@ float varianza(int a[r]){
 int main()
 {
 	
-    srand((unsigned)time(NULL));
+   srand((unsigned)time(NULL));
 	int a [x][y];
 	int num_round=0;
 	int med_round[r];
@@ -136,11 +140,11 @@ int main()
 					cout<<endl<<endl<<"MAJ:       "<<maj<<"    TALLY:         "<<tally<<"          MONETA:           "<<moneta<<endl<<endl;
 						 // Se tally > 2t+1
 					if(tally>=3){
-							a2[i]=maj; // Nel prossimo round il processo i avrà valore = maj, quindi tutta l'i-esima colonna della matrice avrà solo il valore maj
+							a2[i]=maj; // Nel prossimo round il processo i avrï¿½ valore = maj, quindi tutta l'i-esima colonna della matrice avrï¿½ solo il valore maj
 					}
 					else{// altrimenti
 
-						a2[i]=moneta;// Nel prossimo round il processo i avrà valore = moneta, quindi tutta l'i-esima colonna della matrice avrà solo il valore moneta	
+						a2[i]=moneta;// Nel prossimo round il processo i avrï¿½ valore = moneta, quindi tutta l'i-esima colonna della matrice avrï¿½ solo il valore moneta	
 
 					}
 							//ridefinire la matrice a attraverso i valori in a2
@@ -158,7 +162,7 @@ int main()
 
 	
 		cout<<endl<<"MEDIA ROUND:"<<media(med_round)<<endl;
-		cout << "Il numero di round dopo il quale la probabilita di raggiungere un accordo > del 99.9% è: " << accprob(med_round)<<endl;
-			//calcolo la varianza usando la formula E[u^2] - µ^2
+		cout << "Il numero di round dopo il quale la probabilita di raggiungere un accordo > del 99.9%: " << accprob(med_round)<<endl;
+			//calcolo la varianza usando la formula E[u^2] - ï¿½^2
   		cout << "varianza: " << varianza(med_round) << endl;
 }
