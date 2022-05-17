@@ -1,12 +1,6 @@
 # Considera il caso di un sistema distribuito costituito da n=4 processi di cui il quarto è inaffidabile. I tre processi affidabili seguono 
-# fedelmente il protocollo MonteCarlo mentre il processo inaffidabile, a ogni round, spedisce al processo affidabile i (con i=1,2 e 3) il bit 1-b(i). 
-# non più 2021:
-# Implementa i tre processi affidabili e calcola media e varianza del numero di round necessari per raggiungere l'accordo. Determina empiricamente il 
-# numero di round dopo il quale la probabilità che l'accordo è raggiunto è più grande del 99.9% e cerca di dare una spiegazione al risultato ottenuto
-
-# 2021
-# Considera il caso di un sistema distribuito costituito da n=4 processi di cui il quarto è inaffidabile. I tre processi affidabili seguono 
-# fedelmente il protocollo MonteCarlo mentre il processo inaffidabile, a ogni round, spedisce al processo affidabile j (con j=1,2 e 3) il bit 1-b(j). 
+# fedelmente il protocollo MonteCarlo mentre il processo inaffidabile, a ogni round, spedisce al processo affidabile j (con j=1,2 e 3) il bit 1-b(j).
+#  
 # Considera R=2^10 run in cui l'accordo è raggiunto in r=1,... round. Spiega il motivo per cui la frazione in cui l'accordo è raggiunto in r round
 #  è all'incirca (R/2^r)
 
@@ -102,32 +96,11 @@ def main():
          tally.clear()
          neededRounds+=1
 
-   roundsProbabilities = {}
-   totalRounds = 0
-   variance = 0    
-   for element in results:
-      totalRounds+= element
-
-   for element in results:
-      variance += (pow((element-(totalRounds/iterations)),2) * 1/iterations)
-      roundsProbabilities[element] = results.count(element)
 
 
-   roundcounter = 0
-   dictionary_items = roundsProbabilities.items()
-   sorted_dict = dict (sorted(dictionary_items))
+   
 
-   #calculating the number of rounds after that the probability of reaching a decision is beyond 99.9%
-   finalvalue = 0
-   for key in sorted_dict:
-      roundcounter += sorted_dict[key]
-      if roundcounter >= (iterations - iterations * 0.001):
-         finalvalue = key
-         break
+   
 
-   print()
-   # print(f"La media del numero di round necessari per ottenere l'accordo è {totalRounds/iterations}")
-   # print (f"La varianza del numero di round necessari per ottenere l'accordo è di {variance}")
-   # print (f"Il numero di round dopo il quale la probabilità che l'accordo sia raggiunto è più grande del 99.9% è {finalvalue}")
    print()
 main()
