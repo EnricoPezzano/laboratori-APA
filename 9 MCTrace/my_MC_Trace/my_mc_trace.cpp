@@ -114,13 +114,18 @@ float varianza(vector<vector<float>> mat){
 	return sum;
 }
 
-int main(){
+int main()
+{
 	srand(time(NULL));
-	int M[4]={5, 10, 25, 100};		// array contenente in numero di iterazioni da effettuare
+
+	int M[4] = {5, 10, 25, 100};  // ogni "cella" contiene il numero di iterazioni da effettuare
 	int iter;
+
 	vector <float> temp(SIZE);
-	vector<vector<float>>mat(SIZE, temp);
+	vector<vector<float>> mat(SIZE, temp);
+
 	generaMatrice(mat);			// matrice generata randomicamente con valori compresi tra 0 e 1
+
 	vector<vector<float>>matT=trasposta(mat);		// traspongo la matrice appena generata
 	vector<vector<float>>A=prodotto(matT, mat);		// moltiplico la matrice per se stessa trasposta per trovare A
 	vector <float> Xm;		// vettori che conterrà gli Xm
