@@ -7,5 +7,5 @@ Per eseguire il programma: ./a.out
 
 Per generare i grafici: python3 my_plot.py
 
-Ho deciso di distrubuire il codice in due file per motivi di tempistica e semplicità. Siccome python è più semplice (o comunque meno oneroso come sintassi), ma più lento di c++ nell'ordine dei minuti.
-In questo modo, la parte di calcolo più pesante viene presa in carico da c++, mentre la geneazione degli istogrammi da python; siccome è un calcolo poco pesante e più breve da implementare.
+Ho deciso di distrubuire il codice in due file per motivi di tempistica e semplicità. Siccome python è più "semplice" (o comunque meno oneroso come sintassi), ma più lento di c++ nell'ordine dei minuti.
+In questo modo, la parte di calcolo più pesante viene presa in carico da c++, mentre la generazione degli istogrammi da python, siccome è un calcolo poco pesante e più breve da implementare.

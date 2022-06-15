@@ -13,79 +13,85 @@ using namespace std;
 #define SIZE 300
 ofstream fout("output.txt");
 
-void generaMatrice(vector<vector<float>> &mat){		// genera una matrice di dimensione SIZE con elementi randomici tra 0 e 1 
-	for (int j = 0; j < SIZE ; j++){
-		for(int i = 0; i < SIZE; i++){
+// genera una matrice di dimensione SIZE con elementi randomici tra 0 e 1
+void fill_matrix(vector<vector<float>> &mat){
+	for (int j=0; j<SIZE; j++)
+		for(int i=0; i<SIZE; i++)
 			mat[j][i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		}
-	}
+
 }
 
-void stampa(vector<vector<float>> mat){		// stampa la matrice
-	for (int j = 0; j < SIZE ; j++){
-		for(int i = 0; i < SIZE; i++){
+// da controllare se utilizzata nel codice "stampa()"
+void my_print(vector<vector<float>> mat){
+	for (int j=0; j<SIZE; j++){
+		for(int i=0; i<SIZE; i++){
 			cout << mat[j][i] << " ";
 		}
 		cout << endl;
 	}
 }
 
-vector<vector<float>> trasposta(vector<vector<float>>mat){		// traspone la matrice
+vector<vector<float>> transpose(vector<vector<float>>mat){		// traspone la matrice
 	vector <float> temp(SIZE);
-	vector<vector<float>>matT(SIZE, temp);
-	for (int j = 0; j < SIZE ; j++){
-		for(int i = 0; i < SIZE; i++){
-			matT[j][i]=mat[i][j];
+	vector<vector<float>> matT(SIZE, temp);
+	for (int j=0; j<SIZE ; j++){
+		for(int i=0; i<SIZE; i++){
+			matT[j][i] = mat[i][j];
 		}
 	}
 	return matT;
 }
 
-float norma(vector<vector<float>> mat){		// calcola la norma di Frobenius al quadrato
+float frobenius_norme(vector<vector<float>> mat){		// calcola la norma di Frobenius al quadrato
 	float sum = 0;
-	for (int j = 0; j < SIZE ; j++){
-		for(int i = 0; i < SIZE; i++){
+	for (int j=0; j<SIZE; j++){
+		for(int i=0; i<SIZE; i++){
 			sum += pow(mat[j][i], 2);
 		}
 	}
 	return sum;
 }
 
-vector<vector<float>> prodotto(vector<vector<float>>mat1, vector<vector<float>>mat2){		// calcola il prodotto riga per colonna tra due matrici
+// calcola il prodotto riga per colonna tra due matrici
+vector<vector<float>> mul(vector<vector<float>>mat1, vector<vector<float>>mat2){
 	vector <float> temp(mat1.size());		//righe
-	vector<vector<float>>ris(mat2.size(), temp);		//colonne
-	for (int i = 0; i < mat2.size(); i++) 
-		for(int j = 0; j < mat1.size() ; j++) {
-			ris[i][j]=0;
-			for(int k = 0; k < mat1.size() ; k++)    
-				ris[i][j]=ris[i][j]+mat1[i][k]*mat2[k][j];
+	vector<vector<float>> ris(mat2.size(), temp);		//colonne
+	for (int i=0; i<mat2.size(); i++) 
+		for(int j=0; j<mat1.size(); j++) {
+			ris[i][j] = 0;
+			for(int k=0; k<mat1.size(); k++)    
+				ris[i][j] = ris[i][j]+mat1[i][k]*mat2[k][j];
 	}
+
 	return ris;
 }
 
-vector<float> prodotto(vector<vector<float>>mat, vector<float>vect){		// calcola il prodotto tra una matrice e un vettore
+// calcola il prodotto tra una matrice e un vettore
+vector<float> mul(vector<vector<float>>mat, vector<float>vect){
 	vector <float> ris;
 	float sum = 0;
-	for(int j = 0; j < mat.size(); j++) {
+	for(int j=0; j<mat.size(); j++) {
 		sum = 0;
-		for (int i = 0; i < vect.size(); i++) 
+		for (int i=0; i<vect.size(); i++) 
 			sum += vect[i]*mat[j][i];
 		ris.push_back(sum);
 	}
 	return ris;
 }
 
-float prodotto(vector<float>vect1, vector<float>vect2){		// calcola il prodotto tra due vettori
+float mul(vector<float>vect1, vector<float>vect2){		// calcola il prodotto tra due vettori
 	float sum = 0;
-	for (int i = 0; i < vect1.size(); i++) 
+	for (int i=0; i<vect1.size(); i++) 
 		sum += vect1[i]*vect2[i];
+
 	return sum;
 }
 
 vector<float> rademacher(){		// crea il vettore di Rademacher
 	vector<float> rademacher;
 	mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-	for (int i = 0; i < SIZE; i++){
+
+	for (int i=0; i<SIZE; i++){
 		if(rand()%2 == 0)
 			rademacher.push_back(1);		// con probabilità 1/2 metto 1
 		else
@@ -95,22 +101,22 @@ vector<float> rademacher(){		// crea il vettore di Rademacher
 	return rademacher;
 }
 
-float traccia(vector<vector<float>>mat){		// calcolo la traccia sommando la diagonale di una matrice
+// calcola la traccia sommando la diagonale della matrice
+float trace(vector<vector<float>>mat){
 	float sum = 0;
 	int i = 0;
-	for (int j = 0; j < SIZE ; j++){
+	for (int j=0; j<SIZE; j++)
 		sum += mat[j][j];
-	}
+
 	return sum;
 }
 
-float varianza(vector<vector<float>> mat){
+float variance(vector<vector<float>> mat){
 	float sum = 0;
-	for (int j = 0; j < SIZE ; j++){
-		for(int i = 0; i < j; i++){
+	for (int j=0; j<SIZE; j++)
+		for(int i=0; i<j; i++)
 			sum += pow(mat[j][i], 2);
-		}
-	}
+
 	return sum;
 }
 
@@ -119,57 +125,62 @@ int main()
 	srand(time(NULL));
 
 	int M[4] = {5, 10, 25, 100};  // ogni "cella" contiene il numero di iterazioni da effettuare
-	int iter;
+	int iterations_n;
 
 	vector <float> temp(SIZE);
 	vector<vector<float>> mat(SIZE, temp);
 
-	generaMatrice(mat);			// matrice generata randomicamente con valori compresi tra 0 e 1
+	fill_matrix(mat); // riempo randomicamente la mtrice con valori [0,1]
 
-	vector<vector<float>>matT=trasposta(mat);		// traspongo la matrice appena generata
-	vector<vector<float>>A=prodotto(matT, mat);		// moltiplico la matrice per se stessa trasposta per trovare A
-	vector <float> Xm;		// vettori che conterrà gli Xm
-	float tracciaMedia;
-	float varianzaMedia;
-	vector <float> media(100);		// vettore che conterrà le medie campionarie (di 100 elementi per funzionare anche nel caso in cui M=100)
-	media[0]=0;
-	vector<float> u;		// vettore di Rademacher
-	float var=0;
+	vector<vector<float>> matT = transpose(mat);
+	vector<vector<float>> A = mul(matT, mat); // moltiplico la matrice per la sua trasposta per trovare A, come da consegna
+	vector<float> Xm; // vettore per contenere gli Xm
+	float avg_trace;
+	float avg_variance;
 
-	fout << (int)traccia(A) << endl;		// stampo su file la traccia effettiva
-	cout << endl;
-	cout << "--- La traccia effettiva della matrice A è: " << traccia(A) << " ---" << endl;
-	cout << endl;
-	for (int k = 0; k < 4; k++){
-		iter = M[k];
-		cout << "Con M = " << iter << ":" << endl;
-		cout << "La varianza della media campionaria è: " << 4*varianza(A)/iter << endl;
-		tracciaMedia=0;
-		for (int n = 0; n < 100; n++){
-			for (int j = 1; j <= iter; j++){
-				u=rademacher();		// campiono un vettore di Rademacher
-				vector<float> Au=prodotto(A, u);
-				float X=prodotto(Au, u);		// ottengo Xm
+	vector<float> avg(100);	// vettore per contenere le medie campionarie (di 100 elementi per far funzionare anche il caso in cui M=100)
+	avg[0] = 0; // valore init
+	vector<float> rademacher_vect;   // vettore di Rademacher per i campionamenti
+	float var = 0;
+
+	fout << (int)trace(A) << endl; // stampo su file la traccia effettiva
+   
+	cout << endl << "La traccia effettiva della matrice A è: " << trace(A) << endl << endl;
+
+	for (int k=0; k<4; k++){ // {5, 10, 25, 100}
+		iterations_n = M[k];
+		cout << "Con M = " << iterations_n << ":" << endl;
+		cout << "La varianza della media campionaria è: " << 4*variance(A)/iterations_n << endl;
+		avg_trace = 0;
+
+// TODO cambiare i commenti
+		for(int n=0; n<100; n++){
+			for(int j=1; j<=iterations_n; j++){
+				rademacher_vect = rademacher();		// campiono un vettore di Rademacher
+				vector<float> Au = mul(A,rademacher_vect);
+				float X = mul(Au,rademacher_vect);		// ottengo Xm
 				Xm.push_back(X);		// e lo inserisco nel corrispettivo vettore
-				media[j]=media[j-1]+((X-media[j-1])/j);		// stimo la traccia
+				avg[j] = avg[j-1]+((X-avg[j-1])/j);		// stimo la traccia
 			}
-			fout << (int)media[iter] << endl;		// stampo su file la stima appena trovata
-			tracciaMedia+=media[iter];		// calcolo la media delle 100 stime per ogni M
-			varianzaMedia=0;
-			var=0;
-			for (int i = 1; i <= iter; i++){
-				var+=pow(Xm[i]-media[iter], 2)/(iter-1);		// calcolo la varianza
-			}
-			varianzaMedia+=var;		// calcolo la media delle 100 varianze per ogni M
+			fout << (int)avg[iterations_n] << endl;		// stampo su file la stima appena trovata
+			avg_trace += avg[iterations_n];		// calcolo la media delle 100 stime per ogni M
+			avg_variance = 0;
+			var = 0;
+			for (int i=1; i<=iterations_n; i++)
+				var += pow(Xm[i]-avg[iterations_n],2)/(iterations_n-1);  // calcolo la varianza
+			
+			avg_variance += var;		// calcolo la media delle 100 varianze per ogni M
 		}
 
-		cout << "La traccia stimata media è: " << tracciaMedia/100 << endl;
-		cout << "Il quadrato della norma di Frobenius è: " << norma(A) << endl;
-		cout << "La varianza campionaria media della stima è: " << varianzaMedia/100 << endl;
-		cout << "Due volte il quadrato della norma di Frobenius fratto M equivale a: " << 2*norma(A)/iter << endl;
-		cout << "--------------------------------------------------" << endl;
-		fout << (int)(traccia(A)-sqrt(pow(Xm[6]-media[iter], 2)/(iter-1))) << endl;		// prendo uno dei 100 valori della varianza campionaria per poi confrontarlo nell'istogramma
-		fout << (int)(traccia(A)+sqrt(pow(Xm[6]-media[iter], 2)/(iter-1))) << endl;
-		}
+		cout << "La traccia stimata media è: " << avg_trace/100 << endl;
+		cout << "Il quadrato della norma di Frobenius è: " << frobenius_norme(A) << endl;
+		cout << "La varianza campionaria media della stima è: " << avg_variance/100 << endl;
+		cout << "Due volte il quadrato della norma di Frobenius fratto M equivale a: " << 2*frobenius_norme(A)/iterations_n << endl;
 
+		cout << "Fine calcolo. Salvo uno dei 100 valori della varianza campionaria per poi confrontarlo nell'istogramma." << endl;
+
+      // TODO perchè sottraggo e poi sommo lo stesso valore?
+		fout << (int)(trace(A)-sqrt(pow(Xm[3]-avg[iterations_n], 2)/(iterations_n-1))) << endl;
+		fout << (int)(trace(A)+sqrt(pow(Xm[3]-avg[iterations_n], 2)/(iterations_n-1))) << endl;
+	}
 }
