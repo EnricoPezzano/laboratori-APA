@@ -79,15 +79,17 @@ vector<float> mul(vector<vector<float>>mat, vector<float>vect){
 	return ris;
 }
 
-float mul(vector<float>vect1, vector<float>vect2){		// calcola il prodotto tra due vettori
+// calcola il prodotto tra due vettori
+float mul(vector<float>vect1, vector<float>vect2){
 	float sum = 0;
-	for (int i=0; i<vect1.size(); i++) 
+	for (int i=0; i<vect1.size(); i++)
 		sum += vect1[i]*vect2[i];
 
 	return sum;
 }
 
-vector<float> rademacher(){		// crea il vettore di Rademacher
+// crea ed inizializzo il vettore di Rademacher
+vector<float> rademacher(){
 	vector<float> rademacher;
 	mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
@@ -125,7 +127,7 @@ int main()
 	srand(time(NULL));
 
 	int M[4] = {5, 10, 25, 100};  // ogni "cella" contiene il numero di iterazioni da effettuare
-	int iterations_n;
+	int iterations;
 
 	vector <float> temp(SIZE);
 	vector<vector<float>> mat(SIZE, temp);
@@ -138,8 +140,8 @@ int main()
 	float avg_trace;
 	float avg_variance;
 
-	vector<float> avg(100);	// vettore per contenere le medie campionarie (di 100 elementi per far funzionare anche il caso in cui M=100)
-	avg[0] = 0; // valore init
+	vector<float> avg_vect(100);	// vettore per contenere le medie campionarie (di 100 elementi per far funzionare anche il caso in cui M=100)
+	avg_vect[0] = 0; // valore init
 	vector<float> rademacher_vect;   // vettore di Rademacher per i campionamenti
 	float var = 0;
 
@@ -148,39 +150,39 @@ int main()
 	cout << endl << "La traccia effettiva della matrice A è: " << trace(A) << endl << endl;
 
 	for (int k=0; k<4; k++){ // {5, 10, 25, 100}
-		iterations_n = M[k];
-		cout << "Con M = " << iterations_n << ":" << endl;
-		cout << "La varianza della media campionaria è: " << 4*variance(A)/iterations_n << endl;
+		iterations = M[k];
+		cout << "Con M = " << iterations << ":" << endl;
+		cout << "La varianza della media campionaria è: " << 4*variance(A)/iterations << endl;
 		avg_trace = 0;
 
-// TODO cambiare i commenti
 		for(int n=0; n<100; n++){
-			for(int j=1; j<=iterations_n; j++){
-				rademacher_vect = rademacher();		// campiono un vettore di Rademacher
+			for(int j=1; j<=iterations; j++){
+				rademacher_vect = rademacher();  // campiono un vettore di Rademacher
 				vector<float> Au = mul(A,rademacher_vect);
-				float X = mul(Au,rademacher_vect);		// ottengo Xm
-				Xm.push_back(X);		// e lo inserisco nel corrispettivo vettore
-				avg[j] = avg[j-1]+((X-avg[j-1])/j);		// stimo la traccia
+				float X = mul(Au,rademacher_vect);  // calcolo X di m...
+				Xm.push_back(X);  //...e lo inserisco nel vettore corrispondente
+				avg_vect[j] = avg_vect[j-1]+((X-avg_vect[j-1])/j); // stima della traccia
 			}
-			fout << (int)avg[iterations_n] << endl;		// stampo su file la stima appena trovata
-			avg_trace += avg[iterations_n];		// calcolo la media delle 100 stime per ogni M
+			fout << (int)avg_vect[iterations] << endl; // stampo su file la stima appena trovata
+			avg_trace += avg_vect[iterations];   // calcolo la media delle 100 stime per ogni M...{5, 10, 25, 100}
 			avg_variance = 0;
 			var = 0;
-			for (int i=1; i<=iterations_n; i++)
-				var += pow(Xm[i]-avg[iterations_n],2)/(iterations_n-1);  // calcolo la varianza
+			for (int i=1; i<=iterations; i++)
+				var += pow(Xm[i]-avg_vect[iterations],2)/(iterations-1);  // calcolo la varianza
 			
-			avg_variance += var;		// calcolo la media delle 100 varianze per ogni M
+// TODO perchè somma var ciclicamente?
+			avg_variance += var; // calcolo la media delle 100 varianze per ogni M...{5, 10, 25, 100}
 		}
 
 		cout << "La traccia stimata media è: " << avg_trace/100 << endl;
 		cout << "Il quadrato della norma di Frobenius è: " << frobenius_norme(A) << endl;
 		cout << "La varianza campionaria media della stima è: " << avg_variance/100 << endl;
-		cout << "Due volte il quadrato della norma di Frobenius fratto M equivale a: " << 2*frobenius_norme(A)/iterations_n << endl;
+		cout << "Due volte il quadrato della norma di Frobenius fratto M equivale a: " << 2*frobenius_norme(A)/iterations << endl;
 
 		cout << "Fine calcolo. Salvo uno dei 100 valori della varianza campionaria per poi confrontarlo nell'istogramma." << endl;
 
       // TODO perchè sottraggo e poi sommo lo stesso valore?
-		fout << (int)(trace(A)-sqrt(pow(Xm[3]-avg[iterations_n], 2)/(iterations_n-1))) << endl;
-		fout << (int)(trace(A)+sqrt(pow(Xm[3]-avg[iterations_n], 2)/(iterations_n-1))) << endl;
-	}
+		fout << (int)(trace(A)-sqrt(pow(Xm[3]-avg_vect[iterations], 2)/(iterations-1))) << endl;
+		fout << (int)(trace(A)+sqrt(pow(Xm[3]-avg_vect[iterations], 2)/(iterations-1))) << endl;
+	} // end for k<4
 }
