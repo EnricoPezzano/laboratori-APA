@@ -13,7 +13,7 @@ using namespace std;
 #define SIZE 300
 ofstream fout("output.txt");
 
-// genera una matrice di dimensione SIZE con elementi randomici tra 0 e 1
+// riempe una matrice di dimensione SIZE con elementi randomici tra 0 e 1
 void fill_matrix(vector<vector<float>> &matrix){
 	for (int j=0; j<SIZE; j++)
 		for(int i=0; i<SIZE; i++)
