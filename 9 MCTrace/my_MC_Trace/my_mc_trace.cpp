@@ -179,7 +179,7 @@ int main()
 		cout << "La varianza campionaria media della stima è: " << avg_variance/100 << endl;
 		cout << "Due volte il quadrato della norma di Frobenius fratto M equivale a: " << 2*frobenius_norme(A)/iterations << endl;
 
-		cout << "Fine calcolo. Salvo uno dei 100 valori della varianza campionaria per poi confrontarlo nell'istogramma." << endl;
+		cout << "Fine calcolo. Salvo uno dei valori della varianza campionaria per poi confrontarlo nell'istogramma." << endl;
 
       // TODO 
       fout << (int)(trace(A)+sqrt(pow(Xm[3]-avg_vect[iterations], 2)/(iterations-1))) << endl;
