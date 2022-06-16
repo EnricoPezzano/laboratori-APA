@@ -14,66 +14,66 @@ using namespace std;
 ofstream fout("output.txt");
 
 // genera una matrice di dimensione SIZE con elementi randomici tra 0 e 1
-void fill_matrix(vector<vector<float>> &mat){
+void fill_matrix(vector<vector<float>> &matrix){
 	for (int j=0; j<SIZE; j++)
 		for(int i=0; i<SIZE; i++)
-			mat[j][i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-
+			matrix[j][i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 }
 
-// da controllare se utilizzata nel codice "stampa()"
-void my_print(vector<vector<float>> mat){
+// void my_print(vector<vector<float>> mat){
+// 	for (int j=0; j<SIZE; j++){
+// 		for(int i=0; i<SIZE; i++){
+// 			cout << mat[j][i] << " ";
+// 		}
+// 		cout << endl;
+// 	}
+// }
+
+vector<vector<float>> transpose(vector<vector<float>> matrix){
+	vector <float> tmp(SIZE);
+	vector<vector<float>> matrix_T(SIZE, tmp);
 	for (int j=0; j<SIZE; j++){
 		for(int i=0; i<SIZE; i++){
-			cout << mat[j][i] << " ";
-		}
-		cout << endl;
-	}
-}
-
-vector<vector<float>> transpose(vector<vector<float>>mat){		// traspone la matrice
-	vector <float> temp(SIZE);
-	vector<vector<float>> matT(SIZE, temp);
-	for (int j=0; j<SIZE ; j++){
-		for(int i=0; i<SIZE; i++){
-			matT[j][i] = mat[i][j];
+			matrix_T[j][i] = matrix[i][j];
 		}
 	}
-	return matT;
+	return matrix_T;
 }
 
-float frobenius_norme(vector<vector<float>> mat){		// calcola la norma di Frobenius al quadrato
+// calcola la norma di Frobenius al quadrato
+float frobenius_norme(vector<vector<float>> matrix){
 	float sum = 0;
 	for (int j=0; j<SIZE; j++){
 		for(int i=0; i<SIZE; i++){
-			sum += pow(mat[j][i], 2);
+			sum += pow(matrix[j][i],2);
 		}
 	}
 	return sum;
 }
 
 // calcola il prodotto riga per colonna tra due matrici
-vector<vector<float>> mul(vector<vector<float>>mat1, vector<vector<float>>mat2){
-	vector <float> temp(mat1.size());		//righe
-	vector<vector<float>> ris(mat2.size(), temp);		//colonne
-	for (int i=0; i<mat2.size(); i++) 
-		for(int j=0; j<mat1.size(); j++) {
-			ris[i][j] = 0;
-			for(int k=0; k<mat1.size(); k++)    
-				ris[i][j] = ris[i][j]+mat1[i][k]*mat2[k][j];
+vector<vector<float>> mul(vector<vector<float>> matrix1, vector<vector<float>> matrix2){
+	vector <float> tmp(matrix1.size()); //righe
+	vector<vector<float>> res(matrix2.size(), tmp); //colonne
+
+	for (int i=0; i<matrix2.size(); i++) 
+		for(int j=0; j<matrix1.size(); j++) {
+			res[i][j] = 0;
+			for(int k=0; k<matrix1.size(); k++)    
+				res[i][j] = res[i][j]+matrix1[i][k]*matrix2[k][j];
 	}
 
-	return ris;
+	return res;
 }
 
 // calcola il prodotto tra una matrice e un vettore
-vector<float> mul(vector<vector<float>>mat, vector<float>vect){
+vector<float> mul(vector<vector<float>> matrix, vector<float> vect){
 	vector <float> ris;
 	float sum = 0;
-	for(int j=0; j<mat.size(); j++) {
+	for(int j=0; j<matrix.size(); j++) {
 		sum = 0;
 		for (int i=0; i<vect.size(); i++) 
-			sum += vect[i]*mat[j][i];
+			sum += vect[i]*matrix[j][i];
 		ris.push_back(sum);
 	}
 	return ris;
@@ -91,33 +91,33 @@ float mul(vector<float>vect1, vector<float>vect2){
 // crea ed inizializzo il vettore di Rademacher
 vector<float> rademacher(){
 	vector<float> rademacher;
-	mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+	mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); // mersenne twister
 
 	for (int i=0; i<SIZE; i++){
 		if(rand()%2 == 0)
-			rademacher.push_back(1);		// con probabilità 1/2 metto 1
+			rademacher.push_back(1);// se prob=1/2, metto 1
 		else
-			rademacher.push_back(-1);		// con probabilità 1/2 metto -1
+			rademacher.push_back(-1);  // se prob!=1/2, metto -1
 	}
-	shuffle(rademacher.begin(), rademacher.end(), rng);		// rimescolo il vettore così ne avrò uno diverso ad ogni iterazione
+	shuffle(rademacher.begin(), rademacher.end(), rng);   // "mischio" il vettore, im modo da averne uno diverso ad ogni iterazione
 	return rademacher;
 }
 
-// calcola la traccia sommando la diagonale della matrice
-float trace(vector<vector<float>>mat){
+// calcola la traccia (somma della diagonale della matrice)
+float trace(vector<vector<float>> matrix){
 	float sum = 0;
 	int i = 0;
 	for (int j=0; j<SIZE; j++)
-		sum += mat[j][j];
+		sum += matrix[j][j];
 
 	return sum;
 }
 
-float variance(vector<vector<float>> mat){
+float variance(vector<vector<float>> matrix){
 	float sum = 0;
 	for (int j=0; j<SIZE; j++)
 		for(int i=0; i<j; i++)
-			sum += pow(mat[j][i], 2);
+			sum += pow(matrix[j][i], 2);
 
 	return sum;
 }
@@ -151,7 +151,7 @@ int main()
 
 	for (int k=0; k<4; k++){ // {5, 10, 25, 100}
 		iterations = M[k];
-		cout << "Con M = " << iterations << ":" << endl;
+		cout << "\n\nCon M = " << iterations << ":" << endl;
 		cout << "La varianza della media campionaria è: " << 4*variance(A)/iterations << endl;
 		avg_trace = 0;
 
@@ -170,7 +170,7 @@ int main()
 			for (int i=1; i<=iterations; i++)
 				var += pow(Xm[i]-avg_vect[iterations],2)/(iterations-1);  // calcolo la varianza
 			
-// TODO perchè somma var ciclicamente?
+         // TODO
 			avg_variance += var; // calcolo la media delle 100 varianze per ogni M...{5, 10, 25, 100}
 		}
 
@@ -181,8 +181,8 @@ int main()
 
 		cout << "Fine calcolo. Salvo uno dei 100 valori della varianza campionaria per poi confrontarlo nell'istogramma." << endl;
 
-      // TODO perchè sottraggo e poi sommo lo stesso valore?
+      // TODO 
+      fout << (int)(trace(A)+sqrt(pow(Xm[3]-avg_vect[iterations], 2)/(iterations-1))) << endl;
 		fout << (int)(trace(A)-sqrt(pow(Xm[3]-avg_vect[iterations], 2)/(iterations-1))) << endl;
-		fout << (int)(trace(A)+sqrt(pow(Xm[3]-avg_vect[iterations], 2)/(iterations-1))) << endl;
 	} // end for k<4
 }
